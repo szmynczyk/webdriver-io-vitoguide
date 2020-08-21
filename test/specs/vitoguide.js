@@ -1,7 +1,11 @@
+const { config } = require("../../wdio.conf");
+
 describe('Vitoguide login page', () => {
     it('Maintainer should land on installations page after proper login', async () => {
-        await browser.url('https://vitoguide.viessmann.com/')
-        const loginButton = await $('#gtm_user-btn')
+        await browser.url(config.baseUrl)
+        await browser.pause(2000)
+
+        const loginButton = await $('#gtm_user-btn')   
         await loginButton.click()
 
         const userName = await $('#isiwebuserid')
@@ -13,5 +17,22 @@ describe('Vitoguide login page', () => {
         await login.click()
 
         await expect(browser).toHaveUrlContaining('/installations')
+    });
+    it('Supporter should land on installations page after proper login', async () => {
+        await browser.url(config.baseUrl)
+        await browser.pause(5000)
+
+        const loginButton = await $('#gtm_user-btn')
+        await loginButton.click()
+
+        const userName = await $('#isiwebuserid')
+        await userName.setValue('rsa_intsupport')
+        const password = await $('#isiwebpasswd')
+        await password.setValue('Test12345!')
+
+        const login = await $('#loginButton')
+        await login.click()
+
+        await expect(browser).toHaveUrlContaining('/search')
     })
 })
